@@ -23,7 +23,7 @@ function App() {
          
 
 		setTodos(todos => todos.map(todo => {
-			if (todo._id === data._id) {
+			if (todo && todo._id === data._id) {
 				todo.complete = data.complete;
 			}
 
@@ -57,12 +57,22 @@ function App() {
 			method: "DELETE" 
 		}).then(res => res.json())
 		  .then(data => {
-			setTodos(todos => todos.filter(todo => todo._id !== data._id));
+			setTodos(todos => todos.filter(todo => {
+				if(todo){
+					return todo._id !== data._id
+				}else{
+					return false
+				}
+				
+			}));
 		  })
 
 		
 	}
-
+    const handleDelete = (e,id) => {
+		e.stopPropagation()
+		deleteTodo(id)
+	}
 	return (
 		<div className="App">
 			<h1>Welcome, Lovedy</h1>
@@ -77,7 +87,7 @@ function App() {
 
 						<div className="text">{todo.text}</div>
 
-						<div className="delete-todo" onClick={() => deleteTodo(todo._id)}>x</div>
+						<div className="delete-todo" onClick={(e) => handleDelete(e, todo._id)}>x</div>
 					</div>
 				)) : (
 					<p>You currently have no tasks</p>

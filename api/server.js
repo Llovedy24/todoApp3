@@ -28,12 +28,9 @@ const { json } = require('express');
     }
     });
 
-    app.post('/todo/new', (req, res) => {
-       try { const todo = new Todo({
-            text: req.body.text
-        });
-
-        todo.save();
+    app.post('/todo/new',  async (req, res) => {
+       try { 
+           const todo = await Todo.create(req.body) 
 
         res.json(todo);
     }catch(error){
